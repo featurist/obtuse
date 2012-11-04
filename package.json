@@ -4,7 +4,7 @@
   "author": {
       "name": "Tim Macfarlane",
       "email": "timmacfarlane@gmail.com"
-  }
+  },
   "description": "ERROR: No README.md file found!",
   "main": "index.js",
   "scripts": {
