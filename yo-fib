@@ -1,0 +1,18 @@
+#! /usr/bin/env pogo
+
+limit = process.argv.2
+
+fib (n) =
+    if (n == 0)
+        0
+    else if (n == 1)
+        1
+    else
+        fib (n - 1) + fib (n - 2)
+
+numbers = []
+
+for (n = 0, n < limit, n = n + 1)
+    numbers.push (fib (n))
+
+process.stdout.write (numbers.join ' ')
