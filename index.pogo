@@ -22,13 +22,16 @@ show differences between expected (expected) and actual (actual) =
 
     differences = diff.diff lines (expected.contents, actual.contents)
 
+    mark line (line) with (char) =
+        line.replace(r/\n$/, '').replace(r/^/mg, char)
+
     for each @(difference) in (differences)
         if (difference.added)
-            process.stdout.write (("+" + difference.value).green)
+            console.log (mark line (difference.value) with '+'.green)
         else if (difference.removed)
-            process.stdout.write (("-" + difference.value).red)
+            console.log (mark line (difference.value) with '-'.red)
         else
-            process.stdout.write (difference.value)
+            console.log (mark line (difference.value) with ' ')
 
 for each @(filename) in (program.args)
     actual = {filename = filename}

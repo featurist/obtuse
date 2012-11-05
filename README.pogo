@@ -1,6 +1,8 @@
 exec = require 'child_process'.exec
 fs = require 'fs'
 diff = require 'diff'
+require './given'
+common = require './testCommon'
 
 heading (text) =
     console.log (text)
@@ -37,9 +39,6 @@ when they match () =
         fs.unlink! (executable file)
         fs.unlink! (description file)
 
-remove coloring from (text) =
-    text.replace(new (RegExp "\033\\[\\d+m" 'g'), '')
-
 when they dont match () =
     text "if it doesn't, "
 
@@ -48,7 +47,7 @@ when they dont match () =
         fs.write file! (description file, "goodbye", 'utf-8')
 
         colored output = exec! "pogo index.pogo #(executable file)"
-        output = remove coloring from (colored output)
+        output = common.remove coloring from (colored output)
         expected output = "showing differences between feature.md and feature.pogo
                            +hello!
                            -goodbye"
@@ -88,9 +87,6 @@ fibonacci example () =
 
         fs.write file! (test path (filename), content, 'utf-8')
 
-    indent (text) =
-        text.replace r/^(.+[^\s].*)$/gm "    $1"
-
     yo fib = 'yo-fib'
 
     description =
@@ -107,7 +103,7 @@ fibonacci example () =
 
     line "First you'd start by writing a description of how it worked in your `#(desc file)`:"
     line ()
-    line (indent (description))
+    line (common.indent (description))
 
     exec file = 'README.pogo'
 
@@ -153,17 +149,20 @@ fibonacci example () =
     make file! (exec file) contain (exec content)
 
     line ()
-    line (indent (exec content))
+    line (common.indent (exec content))
 
     command = "pogo ../index.pogo #(exec file)"
     text "Then you can run `#(command)`"
     in directory! (dir, block) =
         cwd = process.cwd ()
+        console.log "CURRENT WORKING DIRECTORY #(process.cwd())"
         try
             process.chdir (dir)
+            console.log "IN DIRECTORY #(process.cwd())"
             block! ()
         finally
             process.chdir (cwd)
+            console.log "BACK IN DIRECTORY #(process.cwd())"
 
     obtuse output = ''
     exit code = nil
@@ -183,6 +182,8 @@ fibonacci example () =
     else
         line "output of:"
 
-        line (indent (obtuse output))
+        line (common.indent (obtuse output))
 
 fibonacci example ()
+
+obtuse 'diffs'
